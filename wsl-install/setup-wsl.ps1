@@ -359,7 +359,7 @@ function Copy-NixOSConfigurationFiles {
 }
 
 function Invoke-RebuildWithFlake {
-    param ([string]$flakePath = "~/nix-config#nixos")
+    param ([string]$flakePath = "~/nix-config#nixos-wsl")
     try {
         Write-OutputLog "Rebuilding NixOS with flake configuration at $flakePath..."
         wsl.exe -d NixOS -- bash -c "sudo nixos-rebuild switch --flake $flakePath"
@@ -465,7 +465,7 @@ function Copy-NixFiles {
 
 function Remove-OldDotfilesRepo {
     try {
-        Write-OutputLog "Removing old dotfiles repository in ~/nix-config#nixos ..."
+        Write-OutputLog "Removing old dotfiles repository in ~/nix-config#nixos-wsl ..."
         wsl.exe -d NixOS -- bash -c "rm -rf ~/nix-config"
         Write-OutputLog "Removed old dotfiles repository."
     }
@@ -544,7 +544,7 @@ function main {
     Set-DefaultWSL
 
     Copy-NixOSConfigurationFiles
-    Invoke-RebuildWithFlake "~/nix-config#nixos"
+    Invoke-RebuildWithFlake "~/nix-config#nixos-wsl"
 
     Stop-WSL
     Set-Ownership
@@ -553,10 +553,10 @@ function main {
     Remove-OldHomeManagerGcroots
     New-NixFilesDirectory
     Copy-NixFiles
-    Invoke-RebuildWithFlake "~/nix-config#nixos"
+    Invoke-RebuildWithFlake "~/nix-config#nixos-wsl"
     Remove-OldDotfilesRepo
     Invoke-CloneNewDotfilesRepo
-    Invoke-RebuildWithFlake "~/nix-config#nixos"
+    Invoke-RebuildWithFlake "~/nix-config#nixos-wsl"
 
     Write-OutputLog "Setup complete."
 
